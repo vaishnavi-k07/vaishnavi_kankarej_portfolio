@@ -1,0 +1,253 @@
+/* ------------------------------------------------------------------
+   Project detail overlay.
+   ------------------------------------------------------------------ */
+
+.pm {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-overlay);
+  display: grid;
+  place-items: center;
+  padding: clamp(1rem, 0.5rem + 2vw, 2.5rem);
+}
+
+.pm-scrim {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(5, 3, 6, 0.78);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  cursor: default;
+  animation: pm-fade 0.3s var(--ease-out);
+}
+
+.pm-panel {
+  position: relative;
+  width: min(100%, 46rem);
+  max-height: min(86vh, 48rem);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r-lg);
+  background: var(--bg-elev);
+  overflow: hidden;
+  animation: pm-rise 0.42s var(--ease-out);
+}
+
+@keyframes pm-fade {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes pm-rise {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+}
+
+.pm-scroll {
+  --pm-pad: clamp(1.5rem, 1rem + 2.5vw, 2.75rem);
+  max-height: inherit;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: var(--pm-pad);
+}
+
+/* The banner runs edge to edge; the padding above it is cancelled so it
+   meets the panel's own rounded corners. */
+.pm-visual {
+  margin:
+    calc(var(--pm-pad) * -1) calc(var(--pm-pad) * -1)
+    clamp(1.25rem, 1rem + 1vw, 1.75rem);
+  border-bottom: 1px solid var(--line);
+}
+
+/* ---- close ---- */
+
+.pm-close {
+  position: absolute;
+  top: 0.9rem;
+  right: 0.9rem;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border: 1px solid var(--line-strong);
+  border-radius: 50%;
+  background: rgba(7, 5, 8, 0.72);
+  color: var(--text);
+  transition:
+    color var(--t-fast) var(--ease-out),
+    border-color var(--t-fast) var(--ease-out),
+    background-color var(--t-fast) var(--ease-out);
+}
+
+.pm-close:hover,
+.pm-close:focus-visible {
+  color: var(--accent);
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+
+/* ---- head ---- */
+
+.pm-eyebrow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.75rem;
+  /* Clear of the close button. */
+  padding-right: 3rem;
+  font-size: var(--fs-micro);
+  letter-spacing: var(--ls-wide);
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.pm-index {
+  font-size: var(--fs-h4);
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+}
+
+.pm-title {
+  margin-top: 0.75rem;
+  font-size: var(--fs-h3);
+  font-weight: 500;
+  color: var(--text);
+  text-wrap: balance;
+}
+
+.pm-subtitle {
+  margin-top: 0.3rem;
+  font-size: var(--fs-small);
+  color: var(--muted);
+}
+
+.pm-description {
+  margin-top: 1.25rem;
+  max-width: 62ch;
+  color: var(--muted);
+  line-height: var(--lh-body);
+}
+
+/* ---- metric ---- */
+
+.pm-metric {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.25rem 0.9rem;
+  margin-top: 1.5rem;
+  padding: 1rem 1.2rem;
+  border: 1px solid var(--line);
+  border-left: 2px solid var(--accent);
+  border-radius: var(--r-sm);
+  background: var(--card);
+}
+
+.pm-metric-value {
+  font-size: var(--fs-h3);
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  color: var(--accent);
+}
+
+.pm-metric-label {
+  flex: 1 1 16rem;
+  font-size: var(--fs-small);
+  color: var(--muted);
+}
+
+/* ---- blocks ---- */
+
+.pm-block {
+  margin-top: clamp(1.5rem, 1.25rem + 1vw, 2.25rem);
+}
+
+.pm-subhead {
+  font-size: var(--fs-micro);
+  font-weight: 500;
+  letter-spacing: var(--ls-wide);
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.pm-highlights {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  margin-top: 0.9rem;
+  max-width: 62ch;
+}
+
+.pm-highlights li {
+  position: relative;
+  padding-left: 1.1rem;
+  font-size: var(--fs-small);
+  color: var(--muted);
+}
+
+.pm-highlights li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.62em;
+  width: 5px;
+  height: 1px;
+  background: var(--accent);
+}
+
+.pm-tools {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: 0.9rem;
+}
+
+/* ---- actions ---- */
+
+.pm-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: clamp(1.75rem, 1.5rem + 1vw, 2.5rem);
+  padding-top: clamp(1.25rem, 1rem + 1vw, 1.75rem);
+  border-top: 1px solid var(--line);
+}
+
+@media (max-width: 480px) {
+  .pm-actions .btn {
+    flex: 1 1 100%;
+  }
+}
+
+/* ------------------------------------------------------------------
+   Reduced motion
+   ------------------------------------------------------------------ */
+
+@media (prefers-reduced-motion: reduce) {
+  .pm-scrim,
+  .pm-panel {
+    animation: none;
+  }
+}
+
+/* ------------------------------------------------------------------
+   Touch targets: a finger needs 44px, a mouse does not. Raised only
+   where the pointer is actually coarse, and kept in this file so it
+   lands after the rule it is widening.
+   ------------------------------------------------------------------ */
+
+@media (pointer: coarse) {
+  .pm-close {
+    width: 44px;
+    height: 44px;
+  }
+}

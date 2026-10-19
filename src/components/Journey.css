@@ -1,0 +1,172 @@
+/* ------------------------------------------------------------------
+   Journey — a single-column rail.
+
+   One column at every width: alternating sides would only buy symmetry
+   on wide screens and cost a second reading order on narrow ones. The
+   rail is drawn segment by segment between the node dots, so it ends
+   exactly on the last node instead of trailing past it.
+   ------------------------------------------------------------------ */
+
+.timeline {
+  --node: 34px;
+  --rung: clamp(2rem, 1.5rem + 2vw, 3.25rem);
+
+  position: relative;
+  max-width: 62rem;
+}
+
+.timeline-item {
+  position: relative;
+  display: grid;
+  grid-template-columns: var(--node) minmax(0, 1fr);
+  column-gap: clamp(1rem, 0.6rem + 1.4vw, 1.75rem);
+}
+
+.timeline-item + .timeline-item {
+  margin-top: var(--rung);
+}
+
+/*
+ * The connector down to the next node. Decorative, so it lives on a
+ * pseudo-element; it draws itself in just behind its own entry, which
+ * makes the rail build downward as the section is scrolled.
+ */
+.timeline-item::before {
+  content: '';
+  position: absolute;
+  top: var(--node);
+  left: calc(var(--node) / 2);
+  width: 1px;
+  height: calc(100% - var(--node) + var(--rung));
+  background: var(--line-strong);
+  transform: scaleY(0);
+  transform-origin: top;
+  transition: transform 0.9s var(--ease-out);
+  transition-delay: calc(var(--i, 0) * 70ms + 180ms);
+}
+
+.timeline-item.is-revealed::before {
+  transform: scaleY(1);
+}
+
+.timeline-item:last-child::before {
+  content: none;
+}
+
+/* ---- node ---- */
+
+.timeline-node {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--node);
+  height: var(--node);
+  border: 1px solid var(--line-strong);
+  border-radius: 50%;
+  /* Opaque, so the connector passes behind it rather than through. */
+  background: var(--bg);
+  color: var(--muted);
+}
+
+/*
+ * The two types share one system — same dot, same rail, same spacing —
+ * and differ only in the icon and whether the node is lit. Experience
+ * is the lit one, which also puts the emphasis on the most recent
+ * entry without needing a separate treatment for it.
+ */
+.timeline-item[data-type='experience'] .timeline-node {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: var(--accent-soft);
+  box-shadow: 0 0 0 4px rgba(194, 164, 255, 0.08);
+}
+
+/* ---- body ---- */
+
+.timeline-body {
+  padding-bottom: 0.35rem;
+}
+
+.timeline-period {
+  font-size: var(--fs-micro);
+  font-weight: 500;
+  letter-spacing: var(--ls-wide);
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.timeline-title {
+  margin-top: 0.5rem;
+  font-size: var(--fs-h4);
+  font-weight: 500;
+  color: var(--text);
+}
+
+.timeline-org {
+  margin-top: 0.3rem;
+  font-size: var(--fs-small);
+  color: var(--muted);
+}
+
+.timeline-dot {
+  margin-inline: 0.5rem;
+  color: var(--faint);
+}
+
+.timeline-meta {
+  margin-top: 0.75rem;
+}
+
+.timeline-points {
+  margin-top: 0.9rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  max-width: 62ch;
+}
+
+.timeline-points li {
+  position: relative;
+  padding-left: 1.1rem;
+  font-size: var(--fs-small);
+  color: var(--muted);
+}
+
+/* Markers are drawn rather than listed, so the text stays selectable
+   and screen readers get a clean list. */
+.timeline-points li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.62em;
+  width: 5px;
+  height: 1px;
+  background: var(--accent);
+}
+
+/* ------------------------------------------------------------------
+   Narrow screens: the same single column, tightened.
+   ------------------------------------------------------------------ */
+
+@media (max-width: 560px) {
+  .timeline {
+    --node: 28px;
+  }
+
+  .timeline-title {
+    font-size: var(--fs-body);
+  }
+}
+
+/* ------------------------------------------------------------------
+   Reduced motion: the rail is simply already drawn.
+   ------------------------------------------------------------------ */
+
+@media (prefers-reduced-motion: reduce) {
+  .timeline-item::before {
+    transform: none;
+    transition: none;
+  }
+}

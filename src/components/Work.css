@@ -1,0 +1,193 @@
+/* ------------------------------------------------------------------
+   My Work — project card.
+
+   The gallery shell around these cards (pinned section, heading row,
+   counter, rail, arrows and the track itself) is shared with
+   Credentials and lives in src/styles/gallery.css.
+   ------------------------------------------------------------------ */
+
+.pc {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  background: var(--card);
+  overflow: hidden;
+  transition:
+    border-color var(--t-fast) var(--ease-out),
+    background-color var(--t-fast) var(--ease-out),
+    transform var(--t-fast) var(--ease-out);
+}
+
+.pc:hover,
+.pc:focus-within {
+  border-color: var(--line-strong);
+  background: var(--card-hover);
+  transform: translateY(-3px);
+}
+
+/* ---- visual ---- */
+
+/* The panel itself is ProjectVisual; this only frames it and gives the
+   expand arrow something to sit against. */
+.pc-visual {
+  position: relative;
+  /* The banner sets its own height from its aspect ratio; without this
+     a short card would squash it instead of letting the body shrink. */
+  flex: 0 0 auto;
+  background: var(--bg-elev);
+  overflow: hidden;
+}
+
+/* ---- expand arrow ---- */
+
+.pc-expand {
+  position: absolute;
+  top: 0.85rem;
+  right: 0.85rem;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  border: 1px solid var(--line-strong);
+  border-radius: 50%;
+  background: rgba(7, 5, 8, 0.6);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  color: var(--text);
+  /* Present and reachable at all times — only its paint is withheld. */
+  opacity: 0;
+  transform: scale(0.9);
+  transition:
+    opacity var(--t-fast) var(--ease-out),
+    transform var(--t-fast) var(--ease-out),
+    color var(--t-fast) var(--ease-out),
+    border-color var(--t-fast) var(--ease-out),
+    background-color var(--t-fast) var(--ease-out);
+}
+
+.pc:hover .pc-expand,
+.pc:focus-within .pc-expand,
+.pc-expand:focus-visible {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.pc-expand:hover,
+.pc-expand:focus-visible {
+  color: var(--accent);
+  border-color: var(--accent);
+  background: rgba(194, 164, 255, 0.2);
+}
+
+/*
+ * Nothing hovers on a touch screen, so the arrow is simply always
+ * there. Same rule covers reduced motion, where a control that fades
+ * in on approach is the wrong idea anyway.
+ */
+@media (hover: none), (prefers-reduced-motion: reduce) {
+  .pc-expand {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ---- body ---- */
+
+.pc-body {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  gap: 0.6rem;
+  padding: clamp(1.1rem, 0.9rem + 0.6vw, 1.6rem);
+}
+
+.pc-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: var(--fs-micro);
+  letter-spacing: var(--ls-wide);
+  text-transform: uppercase;
+}
+
+.pc-index {
+  font-size: var(--fs-h4);
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+}
+
+.pc-category {
+  color: var(--muted);
+}
+
+.pc-title {
+  font-size: var(--fs-h4);
+  font-weight: 500;
+  line-height: var(--lh-snug);
+  color: var(--text);
+  text-wrap: balance;
+}
+
+.pc-summary {
+  font-size: var(--fs-small);
+  color: var(--muted);
+}
+
+/* ---- tools ---- */
+
+.pc-tools {
+  margin-top: auto;
+  padding-top: 1rem;
+  border-top: 1px solid var(--line);
+}
+
+.pc-tools-head {
+  font-size: var(--fs-micro);
+  font-weight: 500;
+  letter-spacing: var(--ls-wide);
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.pc-tools ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: 0.7rem;
+}
+
+/* ------------------------------------------------------------------
+   Reduced motion: the card settles without moving.
+   ------------------------------------------------------------------ */
+
+@media (prefers-reduced-motion: reduce) {
+  .pc,
+  .pc-expand {
+    transition: none;
+  }
+
+  .pc:hover,
+  .pc:focus-within {
+    transform: none;
+  }
+}
+
+/* ------------------------------------------------------------------
+   Touch targets: a finger needs 44px, a mouse does not. Raised only
+   where the pointer is actually coarse, and kept in this file so it
+   lands after the rule it is widening.
+   ------------------------------------------------------------------ */
+
+@media (pointer: coarse) {
+  .pc-expand {
+    width: 44px;
+    height: 44px;
+  }
+}

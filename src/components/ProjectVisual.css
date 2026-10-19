@@ -1,0 +1,47 @@
+/* ------------------------------------------------------------------
+   Project banner — shared by the card and the detail overlay.
+   ------------------------------------------------------------------ */
+
+.pv {
+  position: relative;
+  /* Close to the supplied banners' own 16:9–2:1 proportions, so the
+     fitted image leaves only a thin band above and below. */
+  aspect-ratio: 16 / 9;
+  background: var(--bg-sunken);
+  overflow: hidden;
+}
+
+.pv img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  /* contain, not cover: these banners carry their title on the left and
+     a panel on the right, and cropping would cut both. */
+  object-fit: contain;
+}
+
+/* Stand-in panel for a project with no banner yet. */
+.pv-monogram {
+  display: grid;
+  place-items: center;
+  background:
+    radial-gradient(120% 90% at 18% 0%, rgba(194, 164, 255, 0.18) 0%, transparent 58%),
+    linear-gradient(145deg, var(--bg-elev) 0%, var(--bg-sunken) 100%);
+}
+
+.pv-monogram-mark {
+  font-size: clamp(2.5rem, 2rem + 2vw, 3.5rem);
+  font-weight: 500;
+  letter-spacing: -0.04em;
+  color: rgba(234, 229, 236, 0.14);
+}
+
+.pv-monogram-index {
+  position: absolute;
+  left: 1rem;
+  bottom: 0.75rem;
+  font-size: var(--fs-micro);
+  letter-spacing: var(--ls-wide);
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+}

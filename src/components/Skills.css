@@ -1,0 +1,321 @@
+/* ------------------------------------------------------------------
+   Tech stack.
+
+   Plain CSS, same as every other section here — no modules, no utility
+   framework, so these class names are the ones the markup carries.
+
+   A responsive grid of glass icon tiles over a soft accent halo.
+   Only transform, opacity and box-shadow are animated.
+   ------------------------------------------------------------------ */
+
+.skills {
+  position: relative;
+  /* Keeps the halo from widening the page when it drifts. */
+  overflow: hidden;
+  background: var(--bg);
+}
+
+/* ---- backdrop halo ---- */
+
+.skills-glow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: min(1100px, 120%);
+  aspect-ratio: 1;
+  pointer-events: none;
+  /* --px/--py are written by the cursor-drift handler; both default to
+     0, so the halo is centred with no JavaScript at all. */
+  transform: translate3d(calc(-50% + var(--px, 0px)), calc(-50% + var(--py, 0px)), 0);
+  transition: transform 0.9s var(--ease-out);
+  background: radial-gradient(
+    circle at center,
+    rgba(168, 124, 255, 0.17) 0%,
+    rgba(168, 124, 255, 0.07) 38%,
+    transparent 68%
+  );
+}
+
+.skills-inner {
+  position: relative;
+  z-index: var(--z-base);
+}
+
+/* ---- category filter ---- */
+
+.skill-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-bottom: clamp(2rem, 1.5rem + 2vw, 3rem);
+}
+
+.skill-pill {
+  position: relative;
+  isolation: isolate;
+  display: inline-flex;
+  align-items: center;
+  padding: 0.5rem 1.1rem;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r-pill);
+  color: var(--muted);
+  background: var(--card);
+  font-size: var(--fs-small);
+  font-weight: 500;
+  white-space: nowrap;
+  transition:
+    color var(--t-fast) var(--ease-out),
+    border-color var(--t-fast) var(--ease-out);
+}
+
+.skill-pill:hover,
+.skill-pill:focus-visible {
+  color: var(--text);
+  border-color: var(--accent);
+}
+
+/* The sliding accent indicator. Framer moves this one element between
+   pills via layoutId, so only the active pill ever renders it. */
+.skill-pill-bg {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: var(--r-pill);
+  background: var(--accent);
+}
+
+.skill-pill[aria-pressed='true'] {
+  color: var(--accent-ink);
+  border-color: var(--accent);
+}
+
+.skill-pill-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Separated from the label by its own divider, never run together. */
+.skill-pill-count {
+  display: inline-flex;
+  align-items: center;
+  padding-left: 0.5rem;
+  border-left: 1px solid currentColor;
+  font-size: var(--fs-micro);
+  font-variant-numeric: tabular-nums;
+  /* Quieter than the label, but not below 4.5:1 against the pill. */
+  opacity: 0.82;
+}
+
+/* ---- grid ---- */
+
+.skill-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(104px, 1fr));
+  gap: clamp(0.5rem, 0.35rem + 0.5vw, 0.85rem);
+  align-items: stretch;
+}
+
+/* A category heading is a cell that takes the whole row. */
+.skill-grid-head {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.4rem 0.9rem;
+  margin-top: 1.75rem;
+  padding-bottom: 0.65rem;
+  border-bottom: 1px solid var(--line);
+}
+
+.skill-grid-head:first-child {
+  margin-top: 0;
+}
+
+.skill-grid-head h3 {
+  font-size: var(--fs-h4);
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  color: var(--text);
+}
+
+.skill-grid-head p {
+  color: var(--muted);
+  font-size: var(--fs-micro);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+/* ---- tile ---- */
+
+.skill-tile {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  aspect-ratio: 1;
+  padding: 0.75rem 0.5rem;
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  background: var(--card);
+  cursor: default;
+  transition:
+    transform var(--t-fast) var(--ease-out),
+    border-color var(--t-fast) var(--ease-out),
+    background-color var(--t-fast) var(--ease-out),
+    box-shadow var(--t-fast) var(--ease-out);
+}
+
+.skill-tile:hover,
+.skill-tile:focus-visible {
+  transform: translateY(-4px);
+  border-color: var(--accent);
+  background: var(--card-hover);
+  box-shadow:
+    0 0 0 1px var(--accent-soft),
+    0 14px 34px -14px rgba(168, 124, 255, 0.55);
+}
+
+/* The bloom behind the tile. Drawn on a pseudo-element so the tile
+   itself never repaints its children to show it. */
+.skill-tile::after {
+  content: '';
+  position: absolute;
+  inset: -22%;
+  z-index: -1;
+  border-radius: 50%;
+  opacity: 0;
+  background: radial-gradient(circle at center, var(--glow) 0%, transparent 70%);
+  transition: opacity var(--t-fast) var(--ease-out);
+}
+
+.skill-tile:hover::after,
+.skill-tile:focus-visible::after {
+  opacity: 1;
+}
+
+/* ---- logo / monogram ---- */
+
+.skill-tile-mark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 34px;
+  /* The SVG inherits this, so the logo lands at 34px, not inline-glyph size. */
+  font-size: 34px;
+  line-height: 1;
+  color: var(--muted);
+  transition:
+    color var(--t-fast) var(--ease-out),
+    transform var(--t-fast) var(--ease-out);
+}
+
+.skill-tile-mark svg {
+  width: 1em;
+  height: 1em;
+  display: block;
+}
+
+/* Muted by default, the brand colour on hover or focus. Tiles whose
+   brand hex would be unreadable here carry no --logo and reveal in the
+   site accent instead. */
+.skill-tile:hover .skill-tile-mark,
+.skill-tile:focus-visible .skill-tile-mark {
+  color: var(--logo, var(--accent));
+  transform: scale(1.08);
+}
+
+.skill-tile-mono {
+  font-family: var(--font-mono);
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: var(--faint);
+}
+
+.skill-tile:hover .skill-tile-mono,
+.skill-tile:focus-visible .skill-tile-mono {
+  color: var(--accent);
+}
+
+.skill-tile-name {
+  color: var(--text);
+  font-size: var(--fs-micro);
+  line-height: 1.3;
+  text-align: center;
+  text-wrap: balance;
+  /* Long names stay inside the tile rather than widening the column. */
+  overflow-wrap: anywhere;
+  hyphens: auto;
+}
+
+/* ---- touch and narrow screens ---- */
+
+@media (hover: none) {
+  /* No hover to reveal with, so the logos are in colour from the start. */
+  .skill-tile-mark {
+    color: var(--logo, var(--accent));
+  }
+
+  .skill-tile-mono {
+    color: var(--accent);
+  }
+}
+
+@media (max-width: 640px) {
+  .skill-grid {
+    grid-template-columns: repeat(auto-fill, minmax(88px, 1fr));
+  }
+
+  .skill-tile-mark {
+    height: 28px;
+    font-size: 28px;
+  }
+
+  /* Pills run off the edge rather than stacking into a tall block. */
+  .skill-filters {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scrollbar-width: none;
+    /* Full-bleed scroll, so the row can reach both gutters. */
+    margin-inline: calc(50% - 50vw);
+    padding-inline: calc(50vw - 50%);
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .skill-filters::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* The drift handler never runs, but make the halo immovable regardless. */
+  .skills-glow {
+    transform: translate3d(-50%, -50%, 0);
+    transition: none;
+  }
+
+  .skill-tile:hover,
+  .skill-tile:focus-visible {
+    transform: none;
+  }
+
+  .skill-tile:hover .skill-tile-mark,
+  .skill-tile:focus-visible .skill-tile-mark {
+    transform: none;
+  }
+}
+
+/* ------------------------------------------------------------------
+   Touch targets: a finger needs 44px, a mouse does not. Raised only
+   where the pointer is actually coarse, and kept in this file so it
+   lands after the rule it is widening.
+   ------------------------------------------------------------------ */
+
+@media (pointer: coarse) {
+  .skill-pill {
+    min-height: 44px;
+  }
+}

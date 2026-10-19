@@ -1,0 +1,172 @@
+/* ------------------------------------------------------------------
+   Contact Me.
+
+   No form, so the layout is three blocks: the email and its actions,
+   the remaining details, and the profile links. Only opacity and
+   transform move, via the shared reveal.
+   ------------------------------------------------------------------ */
+
+.contact {
+  background: var(--bg);
+}
+
+.contact-grid {
+  display: grid;
+  gap: clamp(1rem, 0.75rem + 0.8vw, 1.5rem);
+  /* min() so the track can go under 280px on a very narrow phone
+     instead of pushing the grid past the viewport. */
+  grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
+  align-items: start;
+}
+
+/* ---- email ---- */
+
+.contact-primary {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: clamp(1.5rem, 1.1rem + 1.2vw, 2.25rem);
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  background: var(--card);
+  /* Spans the full row on wide screens: it is the primary action. */
+  grid-column: 1 / -1;
+}
+
+.contact-label {
+  font-size: var(--fs-micro);
+  font-weight: 500;
+  letter-spacing: var(--ls-wide);
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.contact-email {
+  font-size: var(--fs-h3);
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  color: var(--text);
+  /* Long address never pushes the card wider than its column. */
+  overflow-wrap: anywhere;
+  transition: color var(--t-fast) var(--ease-out);
+}
+
+.contact-email:hover,
+.contact-email:focus-visible {
+  color: var(--accent);
+}
+
+.contact-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+/* Reserves its line so the card does not resize when feedback appears. */
+.contact-copy-note {
+  min-height: 1.25rem;
+  color: var(--muted);
+  font-size: var(--fs-small);
+}
+
+/* ---- details ---- */
+
+.contact-details,
+.contact-socials {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(1rem, 0.75rem + 0.8vw, 1.5rem);
+}
+
+.contact-row,
+.contact-social {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  padding: clamp(1.1rem, 0.9rem + 0.6vw, 1.5rem);
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  background: var(--card);
+}
+
+.contact-row-icon,
+.contact-social-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: 40px;
+  height: 40px;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  color: var(--accent);
+  background: var(--accent-soft);
+}
+
+.contact-row-text,
+.contact-social-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  min-width: 0;
+}
+
+.contact-row-label,
+.contact-social-label {
+  font-size: var(--fs-micro);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.contact-row-text a,
+.contact-row-text span:not(.contact-row-label),
+.contact-social-handle {
+  color: var(--text);
+  font-size: var(--fs-small);
+  overflow-wrap: anywhere;
+}
+
+.contact-row-text a {
+  transition: color var(--t-fast) var(--ease-out);
+}
+
+.contact-row-text a:hover,
+.contact-row-text a:focus-visible {
+  color: var(--accent);
+}
+
+/* ---- profile links ---- */
+
+.contact-social {
+  transition:
+    border-color var(--t-fast) var(--ease-out),
+    background-color var(--t-fast) var(--ease-out),
+    transform var(--t-fast) var(--ease-out);
+}
+
+.contact-social:hover,
+.contact-social:focus-visible {
+  border-color: var(--accent);
+  background: var(--card-hover);
+  transform: translateY(-3px);
+}
+
+.contact-social-arrow {
+  margin-left: auto;
+  color: var(--faint);
+  transition: color var(--t-fast) var(--ease-out);
+}
+
+.contact-social:hover .contact-social-arrow,
+.contact-social:focus-visible .contact-social-arrow {
+  color: var(--accent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .contact-social:hover,
+  .contact-social:focus-visible {
+    transform: none;
+  }
+}

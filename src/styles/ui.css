@@ -1,0 +1,181 @@
+/* ------------------------------------------------------------------
+   Shared primitives: buttons, chips, section headings.
+   ------------------------------------------------------------------ */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r-pill);
+  font-size: var(--fs-small);
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  transition:
+    border-color var(--t-fast) var(--ease-out),
+    color var(--t-fast) var(--ease-out),
+    transform var(--t-fast) var(--ease-out);
+}
+
+/* Accent wash that wipes up from the bottom on hover. */
+.btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--accent);
+  transform: translateY(101%);
+  transition: transform var(--t-mid) var(--ease-out);
+}
+
+.btn:hover,
+.btn:focus-visible {
+  color: var(--accent-ink);
+  border-color: var(--accent);
+}
+
+.btn:hover::before,
+.btn:focus-visible::before {
+  transform: translateY(0);
+}
+
+.btn:active {
+  transform: scale(0.98);
+}
+
+.btn-primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-ink);
+}
+
+.btn-primary::before {
+  background: var(--text);
+}
+
+.btn-sm {
+  padding: 0.5rem 1.125rem;
+  font-size: var(--fs-micro);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* ------------------------------------------------------------------
+   Touch targets.
+
+   A finger needs 44px; a mouse does not, and forcing it everywhere
+   would loosen the header and the filter row on the desktop. So the
+   floor is raised only where the pointer is actually coarse. Controls
+   defined in a component stylesheet raise their own floor there, where
+   the override lands after the rule it widens.
+   ------------------------------------------------------------------ */
+
+@media (pointer: coarse) {
+  .btn-sm {
+    min-height: 44px;
+  }
+}
+
+/* Icon-only round button. */
+.btn-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--line-strong);
+  border-radius: 50%;
+  color: var(--text);
+  background: rgba(11, 8, 12, 0.6);
+  transition:
+    border-color var(--t-fast) var(--ease-out),
+    color var(--t-fast) var(--ease-out),
+    background-color var(--t-fast) var(--ease-out);
+}
+
+.btn-icon:hover,
+.btn-icon:focus-visible {
+  color: var(--accent);
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+
+/* Small tag used for stacks and skills. */
+.chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.3rem 0.7rem;
+  border: 1px solid var(--line);
+  border-radius: var(--r-pill);
+  background: var(--card);
+  color: var(--muted);
+  font-size: var(--fs-micro);
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  transition:
+    color var(--t-fast) var(--ease-out),
+    border-color var(--t-fast) var(--ease-out);
+}
+
+.chip:hover {
+  color: var(--text);
+  border-color: var(--line-strong);
+}
+
+/* Section heading block. */
+.section-head {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: clamp(2.5rem, 1.5rem + 3vw, 4.5rem);
+}
+
+/* ------------------------------------------------------------------
+   Section heading.
+
+   Defined once and rendered by <SectionTitle>, so every section is
+   identical in size, weight, tracking and colour. Two tones: the
+   opening words in low-emphasis light ink, the key word in the violet
+   accent.
+   ------------------------------------------------------------------ */
+
+.section-title {
+  font-size: var(--fs-h2);
+  font-weight: 600;
+  line-height: var(--lh-tight);
+  letter-spacing: var(--ls-display);
+  text-transform: uppercase;
+  text-wrap: balance;
+}
+
+.section-title-lead {
+  color: var(--text);
+  /* Light, but held back so the accent word leads the eye. */
+  opacity: 0.72;
+}
+
+.section-title-accent {
+  /* Falls back to a flat accent wherever background-clip: text is not
+     honoured, so the word is never invisible. */
+  color: var(--accent);
+  background: linear-gradient(100deg, var(--accent) 0%, var(--accent-2) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
+@supports (-webkit-background-clip: text) or (background-clip: text) {
+  .section-title-accent {
+    color: transparent;
+  }
+}
+
+.section-head p {
+  color: var(--muted);
+  max-width: 56ch;
+}

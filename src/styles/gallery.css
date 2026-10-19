@@ -1,0 +1,145 @@
+/* ------------------------------------------------------------------
+   Pinned horizontal gallery — shared shell.
+
+   Used by My Work and by Credentials. Two layouts from one set of
+   markup, switched by data-gallery on the section:
+     horizontal — the section is pinned and .gal-track runs along X
+     stacked    — ordinary flow, a responsive grid, normal page scroll
+
+   Only transform and opacity are animated in either. The card inside
+   .gal-cell is each section's own; everything here is the frame
+   around it, so the two sections stay in step by construction rather
+   than by two copies of the same rules.
+   ------------------------------------------------------------------ */
+
+[data-gallery] {
+  overflow: hidden;
+}
+
+[data-gallery='horizontal'] {
+  /* Pinned, the section is exactly one screen; the padding the shared
+     .section rule adds would push the row off the bottom. */
+  display: flex;
+  align-items: center;
+  min-height: var(--vh);
+  padding-block: 0;
+}
+
+.gal-inner {
+  width: 100%;
+}
+
+[data-gallery='horizontal'] .gal-inner {
+  padding-top: var(--header-h);
+}
+
+/* ---- heading row ---- */
+
+.gal-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1.5rem 2rem;
+}
+
+.gal-head .section-head {
+  margin-bottom: 0;
+}
+
+[data-gallery='stacked'] .gal-head {
+  margin-bottom: clamp(2.5rem, 1.5rem + 3vw, 4.5rem);
+}
+
+[data-gallery='horizontal'] .gal-head {
+  margin-bottom: clamp(1.75rem, 1.25rem + 2vw, 3rem);
+}
+
+/* ---- controls ---- */
+
+.gal-controls {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+.gal-counter {
+  display: flex;
+  align-items: baseline;
+  gap: 0.35rem;
+  font-size: var(--fs-micro);
+  letter-spacing: var(--ls-wide);
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.gal-counter-now {
+  color: var(--accent);
+  font-weight: 500;
+}
+
+.gal-rail {
+  position: relative;
+  width: clamp(80px, 12vw, 180px);
+  height: 1px;
+  background: var(--line-strong);
+  overflow: hidden;
+}
+
+.gal-rail-fill {
+  position: absolute;
+  inset: 0;
+  background: var(--accent);
+  transform: scaleX(var(--p, 0));
+  transform-origin: left;
+}
+
+.gal-paging {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.gal-page-btn {
+  width: 38px;
+  height: 38px;
+}
+
+.gal-page-btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+/* ---- track ---- */
+
+.gal-viewport {
+  width: 100%;
+}
+
+.gal-track {
+  display: grid;
+}
+
+/* ---- stacked: a responsive grid, normal scroll ---- */
+
+[data-gallery='stacked'] .gal-viewport {
+  width: var(--cWidth);
+  max-width: var(--cMaxWidth);
+  margin-inline: auto;
+}
+
+[data-gallery='stacked'] .gal-track {
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 20rem), 1fr));
+  gap: clamp(1.25rem, 1rem + 1vw, 2rem);
+}
+
+/* ---- horizontal: one row, moved along X by the ScrollTrigger ---- */
+
+[data-gallery='horizontal'] .gal-track {
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(0, clamp(20rem, 27vw, 26rem));
+  gap: clamp(1.25rem, 1rem + 1vw, 2rem);
+  /* Starts level with the container, then runs off the right edge. */
+  padding-inline: calc((100% - min(var(--cWidth), var(--cMaxWidth))) / 2);
+  width: max-content;
+  will-change: transform;
+}
