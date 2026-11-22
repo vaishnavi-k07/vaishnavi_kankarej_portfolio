@@ -126,11 +126,16 @@ Present curated categories rather than fake progress bars or a word cloud. Use o
 ### Certifications
 - Oracle Cloud Infrastructure AI Foundations — Oracle; skills: AI, ML, GenAI, AI agents, agentic workflows.
 - Data Analytics — LinkedIn Learning Community; skills: Data Analysis, Power BI.
+- AIOps with IBM Z and LinuxONE - IBM 
+- Data analytics Job Simulation - Deloitte 
 
 ### Achievements
-- Consistently ranked among the Top 3 in the AI & Data Science Department.
-- National Finalist — Smart India Hackathon (SIH).
-- 3rd Prize Winner — Defect Detection Competition.
+- 1. Top 3 in Department
+Consistently ranked among the top three students in the AI & Data Science Department through strong academic performance.
+- 2. National Finalist — Smart India Hackathon (SIH)
+Qualified for the Grand Finale at VVCE, Mysuru, in December 2023, competing at the national level with an innovative solution.
+- 3. 3rd Prize — Defect Detection Competition
+Secured third place by identifying and correcting code errors, demonstrating debugging skills and logical problem-solving.
 - Use the local `SIH_final` image as the supplied achievement photograph. Inspect its actual file and dimensions. Use a lightbox/gallery if appropriate.
 - Caption “Smart India Hackathon 2023 — Grand Finale” only if supported by the image or supplied resume/source material.
 - Do not identify Vaishnavi's exact position in a group photo unless confirmed.

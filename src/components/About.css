@@ -1,55 +1,76 @@
+
 /* ------------------------------------------------------------------
-   About Me — bio beside the focus list from 1024px, stacked below.
-   Type scale, spacing and accent all come from the shared tokens; this
-   file only sets the measure and the rhythm down each column.
+   About Me — responsive bio and focus areas
+   Desktop: balanced two-column layout
+   Mobile: stacked layout
    ------------------------------------------------------------------ */
+
+/* ---- Main layout ---- */
 
 .about-grid {
   display: grid;
-  /* Top-aligned, so the bio's first line and the "What I work on"
-     heading sit on the same line. */
+  grid-template-columns: 1fr;
   align-items: start;
   row-gap: clamp(2.5rem, 2rem + 2vw, 3.5rem);
 }
 
+/* Prevent the About heading from sitting underneath the fixed navbar.
+   Also helps when navigating directly to #about. */
+.about {
+  scroll-margin-top: 110px;
+}
+
+/* ---- Desktop and laptop layout ---- */
+
 @media (min-width: 1024px) {
   .about-grid {
-    /*
-     * fit-content caps the first track at the reading measure itself,
-     * rather than at a fraction that happens to land near it. The bio's
-     * max-content is far wider than 65ch, so the track resolves to
-     * exactly 65ch at every width and the list takes whatever is left —
-     * no dead slack opening up between the bio and the divider as the
-     * container grows.
-     */
-    grid-template-columns: fit-content(65ch) minmax(0, 1fr);
-    column-gap: clamp(1.75rem, 1.25rem + 1.5vw, 2.75rem);
+    grid-template-columns:
+      minmax(0, 1.65fr)
+      minmax(280px, 0.85fr);
+    column-gap: clamp(2rem, 3vw, 3.5rem);
+  }
+
+  .about-bio {
+    max-width: 65ch;
+    min-width: 0;
+  }
+
+  .about-work {
+    max-width: none;
+    min-width: 0;
+    border-left: 1px solid var(--line);
+    padding-left: clamp(1.5rem, 2.5vw, 2.5rem);
   }
 }
 
-/* Stacked, nothing constrains the blocks but themselves, so the measure
-   is set here and both start on the same left edge. */
+/* Extra adjustment for smaller laptop screens */
+@media (min-width: 1024px) and (max-width: 1200px) {
+  .about-grid {
+    grid-template-columns:
+      minmax(0, 1.4fr)
+      minmax(260px, 0.9fr);
+    column-gap: 2rem;
+  }
+
+  .about-work {
+    padding-left: 1.5rem;
+  }
+}
+
+/* ---- Column sizing ---- */
+
 .about-bio,
 .about-work {
-  max-width: 65ch;
+  width: 100%;
+  min-width: 0;
 }
 
-@media (min-width: 1024px) {
-  .about-work {
-    /* The track is the constraint now; the list may use all of it. */
-    max-width: none;
-  }
-}
-
-/* The focus rows below lay themselves out against this column's own
-   width rather than the viewport's — the two are only loosely related,
-   since .container steps down at 1400px and 900px independently of
-   where this column happens to land. */
+/* Let the focus list respond to its own available width */
 .about-work {
   container-type: inline-size;
 }
 
-/* ---- bio ---- */
+/* ---- Bio paragraphs ---- */
 
 .about-para {
   color: var(--muted);
@@ -60,21 +81,18 @@
   margin-top: 1.1rem;
 }
 
-/* Lead sentence, set a step up — the rest of the bio reads as the
-   detail under it. */
+/* Lead paragraph */
 .about-para:first-child {
   font-size: var(--fs-h4);
   line-height: var(--lh-snug);
   color: var(--text);
 }
 
-/* ---- closing line ---- */
+/* ---- Closing statement ---- */
 
 .about-closing {
   margin-top: clamp(1.75rem, 1.25rem + 1.5vw, 2.5rem);
   padding-left: clamp(1rem, 0.75rem + 1vw, 1.5rem);
-  /* A single accent rule rather than a box, so it reads as a pull quote
-     and not another card. */
   border-left: 2px solid var(--accent);
   font-size: var(--fs-h4);
   font-weight: 500;
@@ -84,24 +102,13 @@
   text-wrap: balance;
 }
 
-/* ---- what I work on ---- */
-
-@media (min-width: 1024px) {
-  .about-work {
-    /* Divides the two columns without boxing either of them in. The
-       padding matches the column gap, so the rule sits midway between
-       the bio and the list. */
-    border-left: 1px solid var(--line);
-    padding-left: clamp(1.75rem, 1.25rem + 1.5vw, 2.75rem);
-  }
-}
+/* ---- What I work on ---- */
 
 .about-subhead {
   font-size: var(--fs-micro);
   font-weight: 500;
   letter-spacing: var(--ls-wide);
   text-transform: uppercase;
-  /* --muted, not --faint: a section subhead leads its column. */
   color: var(--muted);
 }
 
@@ -110,29 +117,25 @@
   width: 100%;
   display: grid;
   gap: 1px;
-  /* Hairlines between rows, drawn by the gap over a ruled background —
-     no border doubling at the ends. */
   background: var(--line);
   border-block: 1px solid var(--line);
 }
 
 .about-focus li {
   display: grid;
-  gap: 0.3rem 1.5rem;
+  grid-template-columns: 1fr;
+  gap: 0.4rem;
   padding: 1rem 0;
   background: var(--bg);
 }
 
-/*
- * Label above detail by default — that is what fits on a phone, and
- * what fits in the narrow right-hand track beside the bio. Given real
- * room, the two go side by side instead. One rule covers both layouts,
- * because both are the same question: how wide is this column.
- */
-@container (min-width: 30rem) {
+/* Put labels and descriptions side by side when the sidebar
+   has enough room. */
+@container (min-width: 25rem) {
   .about-focus li {
-    grid-template-columns: minmax(0, 11rem) minmax(0, 1fr);
+    grid-template-columns: minmax(0, 9rem) minmax(0, 1fr);
     align-items: baseline;
+    gap: 0.5rem 1rem;
   }
 }
 
@@ -145,4 +148,27 @@
 .about-focus-detail {
   font-size: var(--fs-small);
   color: var(--muted);
+}
+
+/* ---- Mobile layout ---- */
+
+@media (max-width: 1023px) {
+  .about-grid {
+    grid-template-columns: 1fr;
+    row-gap: 2.5rem;
+  }
+
+  .about-bio,
+  .about-work {
+    max-width: 65ch;
+  }
+
+  .about-work {
+    border-left: none;
+    padding-left: 0;
+  }
+
+  .about-focus li {
+    grid-template-columns: 1fr;
+  }
 }

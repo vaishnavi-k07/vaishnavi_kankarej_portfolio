@@ -1,20 +1,6 @@
+
 /* ------------------------------------------------------------------
-   Hero backdrop — the clip IS the background.
-
-   No frame, border, radius, shadow or surface of its own. The clip was
-   shot against a charcoal wall that measures #16-1f across the whole
-   empty left side, so against --ink (#171817) there is simply no edge
-   to see: the picture starts where the page is already that colour.
-
-   Two compositions, chosen by the shape of the window rather than its
-   width alone:
-
-   - Landscape (the "cinematic" query below): the frame runs edge to
-     edge, she sits in the right half, and the copy takes the empty wall
-     on the left under a left-to-right wash.
-   - Portrait and phones: there is no empty wall to sit on, so the still
-     becomes a dim textured ground under a near-solid wash and the copy
-     takes the full width.
+   HERO BACKDROP
    ------------------------------------------------------------------ */
 
 .hero-backdrop {
@@ -25,13 +11,8 @@
   background-color: var(--ink);
 }
 
-/*
- * The poster still, on its own layer. It is what shows before the clip
- * is attached, in portrait, under reduced motion, and if the file ever
- * fails — so the hero is never empty. --poster is written by the
- * component, and this layer carries the same geometry as the video, so
- * the swap from still to moving picture is invisible.
- */
+/* Poster image fallback */
+
 .hero-backdrop::before {
   content: '';
   position: absolute;
@@ -39,10 +20,10 @@
   background-image: var(--poster);
   background-repeat: no-repeat;
   background-size: cover;
-  /* Flushed right: whatever has to go is the empty wall on the left,
-     never her. */
   background-position: center right;
 }
+
+/* Background video */
 
 .hero-backdrop-video {
   position: absolute;
@@ -51,23 +32,11 @@
   height: 100%;
   object-fit: cover;
   object-position: center right;
-  /* Nudges the clip's room the last step toward the page ink. */
   filter: brightness(0.97) saturate(0.98);
 }
 
 /* ------------------------------------------------------------------
-   Landscape: the full frame, uncropped left to right.
-
-   A hero taller than the clip's own 16:9 would make `cover` trim the
-   left — and the left is exactly where the copy sits. So the picture is
-   capped at its natural ratio and centred, letting --ink fill the
-   sliver above and below. Her edge then lands at a fixed 45% of the
-   viewport no matter what the window does, which is what the copy
-   column in Hero.css is measured against.
-
-   The 5/4 floor is where that sliver is still a sliver. Below it the
-   portrait composition takes over instead of letterboxing a strip into
-   a tall page.
+   DESKTOP LANDSCAPE COMPOSITION
    ------------------------------------------------------------------ */
 
 @media (min-width: 768px) and (min-aspect-ratio: 5 / 4) {
@@ -78,11 +47,6 @@
     height: min(100%, 56.25vw);
     transform: translateY(-50%);
 
-    /* The one seam the matched colours cannot hide is the desk edge and
-       the paper on it, along the bottom of the frame. A short feather
-       dissolves it; the top is softened to match. When the hero is wide
-       and short the clip is cropped vertically instead, and these few
-       per cent fall outside the picture anyway. */
     -webkit-mask-image: linear-gradient(
       to bottom,
       transparent 0%,
@@ -90,7 +54,14 @@
       #000 93%,
       transparent 100%
     );
-    mask-image: linear-gradient(to bottom, transparent 0%, #000 5%, #000 93%, transparent 100%);
+
+    mask-image: linear-gradient(
+      to bottom,
+      transparent 0%,
+      #000 5%,
+      #000 93%,
+      transparent 100%
+    );
   }
 
   .hero-backdrop::before {
@@ -99,10 +70,7 @@
 }
 
 /* ------------------------------------------------------------------
-   Readability scrim.
-
-   A sibling of the picture rather than a child, so the feather above
-   never thins it.
+   VIDEO READABILITY OVERLAY
    ------------------------------------------------------------------ */
 
 .hero-scrim {
@@ -111,9 +79,6 @@
   z-index: 1;
   pointer-events: none;
 
-  /* Portrait and phones: the copy needs the whole width, so the wash is
-     near-solid and runs top to bottom. The still stays faintly present
-     behind it rather than disappearing. */
   background: linear-gradient(
     to bottom,
     rgba(23, 24, 23, 0.92) 0%,
@@ -122,12 +87,8 @@
   );
 }
 
-/*
- * Landscape: one left-to-right wash — heavy where the copy is, gone by
- * the time it reaches her. Measured against the clip's own pixels, the
- * copy column resolves to about #1a1a19, which puts --text at 13:1 and
- * --muted at 6.1:1.
- */
+/* Desktop overlay */
+
 @media (min-width: 768px) and (min-aspect-ratio: 5 / 4) {
   .hero-scrim {
     background: linear-gradient(
@@ -139,12 +100,8 @@
   }
 }
 
-/*
- * Reduced motion: the markup has already withheld the <video>, so the
- * poster is all there is. Widen the wash a little so a still that never
- * moves sits back, and the copy reads exactly as it does with the clip
- * running.
- */
+/* Reduced motion desktop overlay */
+
 @media (prefers-reduced-motion: reduce) and (min-width: 768px) and (min-aspect-ratio: 5 / 4) {
   .hero-scrim {
     background: linear-gradient(
@@ -157,36 +114,78 @@
 }
 
 /* ------------------------------------------------------------------
-   Sound control.
+   MOBILE AND PORTRAIT TABLET VIDEO
+   ------------------------------------------------------------------ */
 
-   Top right, tucked just under the fixed header and aligned to the
-   same gutter as the container, so it reads as part of the page
-   furniture rather than a player chrome stuck onto the video. It is
-   rendered only where the clip itself is — landscape, motion allowed,
-   playback working — so it is never a dead button.
+@media (max-width: 767px), (max-aspect-ratio: 5 / 4) {
+
+  /* Show the video more prominently */
+
+  .hero-backdrop-video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 65% center;
+    filter: brightness(1.05) saturate(1.05);
+  }
+
+  /* Match poster positioning */
+
+  .hero-backdrop::before {
+    background-size: cover;
+    background-position: 65% center;
+  }
+
+  /* Lighter overlay for better video visibility */
+
+  .hero-scrim {
+    background: linear-gradient(
+      to bottom,
+      rgba(23, 24, 23, 0.55) 0%,
+      rgba(23, 24, 23, 0.48) 45%,
+      rgba(23, 24, 23, 0.65) 75%,
+      rgba(23, 24, 23, 0.78) 100%
+    );
+  }
+
+  /* Mobile sound button */
+
+  .hero-sound {
+    top: calc(var(--header-h) + 0.75rem);
+    right: 5%;
+    width: 44px;
+    height: 44px;
+  }
+}
+
+/* ------------------------------------------------------------------
+   SOUND CONTROL
    ------------------------------------------------------------------ */
 
 .hero-sound {
   position: absolute;
   top: calc(var(--header-h) + 0.85rem);
   right: calc((100% - var(--cWidth)) / 2);
-  /* Over the backdrop and its scrim, and over the copy column, which
-     never reaches this corner anyway. */
   z-index: 3;
 
   display: inline-flex;
   align-items: center;
   justify-content: center;
+
   width: 42px;
   height: 42px;
+
   border: 1px solid var(--line-strong);
   border-radius: 50%;
-  /* Its own dark disc, so the icon holds up wherever the frame behind
-     it happens to be light — the desk lamp sits in this corner. */
+
   background: rgba(7, 5, 8, 0.58);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
+
   color: var(--text);
+
   transition:
     color var(--t-fast) var(--ease-out),
     border-color var(--t-fast) var(--ease-out),
@@ -205,12 +204,23 @@
   transform: scale(0.94);
 }
 
-/* Playing out loud — the one state worth marking, since the icon alone
-   has to be read against moving picture. */
+/* Sound playing indicator */
+
 .hero-sound[data-on] {
   color: var(--accent);
   border-color: var(--accent);
   box-shadow: 0 0 0 4px rgba(194, 164, 255, 0.1);
+}
+
+/* ------------------------------------------------------------------
+   ACCESSIBILITY AND TOUCH TARGETS
+   ------------------------------------------------------------------ */
+
+@media (pointer: coarse) {
+  .hero-sound {
+    width: 44px;
+    height: 44px;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -221,17 +231,8 @@
   .hero-sound:active {
     transform: none;
   }
-}
 
-/* ------------------------------------------------------------------
-   Touch targets: a finger needs 44px, a mouse does not. Raised only
-   where the pointer is actually coarse, and kept in this file so it
-   lands after the rule it is widening.
-   ------------------------------------------------------------------ */
-
-@media (pointer: coarse) {
-  .hero-sound {
-    width: 44px;
-    height: 44px;
+  .hero-backdrop-video {
+    display: none;
   }
 }
