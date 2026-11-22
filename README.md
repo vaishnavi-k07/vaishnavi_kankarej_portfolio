@@ -1,56 +1,62 @@
-# Vaishnavi Kankarej — Portfolio
+# Vaishnavi Kankarej | Portfolio
 
-Personal portfolio for **Vaishnavi Kankarej**, AI/ML Engineer.
-React + TypeScript + Vite, with GSAP/Lenis motion and a lazy-loaded three.js ambient layer.
+**AI/ML Engineer | Artificial Intelligence & Data Science**
 
-## Commands
+A personal portfolio showcasing my technical skills, projects, education, experience, and achievements.
 
-```bash
-npm install     # install dependencies
-npm run dev     # start the dev server (http://localhost:5173)
-npm run build   # typecheck + production build into dist/
-npm run preview # serve the production build locally
-npm run lint    # oxlint
-```
+🌐 **Live Website:** [Visit My Portfolio](https://vaishnavi-kankarej-portfolio.vercel.app/)
 
-## Deploy
+## Tech Stack
 
-The build targets the **root path** by default, which suits Vercel, Netlify and
-Cloudflare Pages with no extra configuration.
+- React, TypeScript, Vite
+- CSS, GSAP, Lenis
+- Three.js
+- Vercel
 
-To serve from a sub-path instead — GitHub Pages, for example — set one env var
-at build time:
+## Run Locally
 
 ```bash
-VITE_BASE_PATH=/vaishnavi_kankarej_portfolio/ npm run build
+# Clone the repository
+git clone https://github.com/vaishnavi-k07/vaishnavi_kankarej_portfolio.git
+
+# Navigate to project
+cd vaishnavi_kankarej_portfolio
+
+# Install dependencies
+npm install
+
+# Start development server
+npm run dev
 ```
 
-Every asset reference in the app resolves through `src/lib/asset.ts`, so that
-single variable is all that changes. See `.env.example`.
+## Available Scripts
 
-## Content
+| Command | Description |
+|---|---|
+| `npm run dev` | Start development server |
+| `npm run build` | Create production build |
+| `npm run preview` | Preview production build |
+| `npm run lint` | Run code analysis |
 
-All text, dates, metrics and links live in `src/data/` — one file per concern:
+## Project Structure
 
-| File | Holds |
-| --- | --- |
-| `profile.ts` | name, role, contact details, social links, media paths |
-| `projects.ts` | project cards, detail bullets, stacks, links, 2 reserved future slots |
-| `skills.ts` | skill groups |
-| `journey.ts` | experience and education timeline, headline stats |
-| `credentials.ts` | certifications, achievements, photo gallery |
-| `nav.ts` | navigation labels and section ids |
+```text
+src/
+├── components/   # UI components
+├── data/         # Portfolio content
+├── hooks/        # Custom React hooks
+└── lib/          # Utility functions
 
-Editing content means editing those files — no component changes required.
-Facts are taken from the resume PDF kept at the repo root; project links were
-verified against the live repositories before being recorded.
+public/
+├── images/
+└── videos/
+```
 
-## Assets
+## Connect With Me
 
-Source files stay at the repo root; deployable copies live in `public/`:
+- [GitHub](https://github.com/vaishnavi-k07)
+- [LinkedIn](https://www.linkedin.com/)
 
-| Source | Published as |
-| --- | --- |
-| `Vaishnavi_OverLeaf_resume (3).pdf` | `public/Vaishnavi_Kankarej_Resume.pdf` |
-| `Intro_Video.mp4` | `public/videos/vaishnavi-intro.mp4` |
-| `SIH_final.png` | `public/images/sih-final.png` |
+---
+
+**Designed and developed by Vaishnavi Kankarej.**
